@@ -5,10 +5,12 @@
 var phonecatApp = angular.module('phonecatApp', [
   'ngRoute',
   'phonecatAnimations',
-
   'phonecatControllers',
   'phonecatFilters',
-  'phonecatServices'
+  'phonecatServices',
+  
+  'gantt',
+  'angularMoment',
 ]);
 
 phonecatApp.config(['$routeProvider',
@@ -21,6 +23,10 @@ phonecatApp.config(['$routeProvider',
       when('/phones/:phoneId', {
         templateUrl: 'partials/phone-detail.html',
         controller: 'PhoneDetailCtrl'
+      }).
+      when('/gantt', {
+        templateUrl: 'partials/gantt.html',
+        controller: 'GanttCtrl'
       }).
       otherwise({
         redirectTo: '/phones'
