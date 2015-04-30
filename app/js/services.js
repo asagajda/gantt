@@ -18,37 +18,52 @@ phonecatServices.factory('tasksOfPlan', ['$resource',
     });
 }]);
 
-phonecatServices.factory('DiagramBuilder', ['tasksOfPlan', 
-  function(tasksOfPlan){
+phonecatServices.factory('DiagramBuilder', ['tasksOfPlan', '$q', '$log',
+  function(tasksOfPlan, $q, $log){
 	var service = {};	
 	var _selectedPlan = 'bla';
-	
+	var _diagramData = [];
 
 	service.setPlan = function(plan)
 	{
 		_selectedPlan = plan;
 	}
+	
+	service.getDiagram = function()
+	{
+		return _diagramData;
+	}
 
 	service.buildDiagram = function()
 	{
-		return tasksOfPlan.query({uid:_selectedPlan});//.$promise;/*.then(
-			/*function(promise)
+		var deferred = $q.defer();
+		tasksOfPlan.query({uid:_selectedPlan}).$promise.then(
+			function(result)
 			{
-				/*var users = [];
-				var rows = [];		
-				for (var i = 0; i < promise.length; i++){
-					if ($.inArray(promise[i].assignees[0], users)==-1)
+				var rows = [];	
+				var users = [];
+				for (var i = 0; i < result.length; i++){
+					if ($.inArray(result[i].assignees[0], users)==-1)
 					{
-						rows[promise[i].assignees[0]] = [];
+						var user = result[i].assignees[0];
+						users.push(user);
+						rows.push({user : user, tasks : []});
 					};
 				};
-				for (var i = 0; i < promise.length; i++){
-					rows[promise[i].assignees[0]].push(promise[i]);
+				for (var i = 0; i < rows.length; i++){
+					for (var j = 0; j < result.length; j++){
+						if (rows[i].user == result[j].assignees[0])
+						{
+							rows[i].tasks.push(result[j]);
+						}
+					}
 				};
-				return promise;
-			}*/
+				deferred.resolve({myresult: rows});
+			}
 			
-		//);
+		);
+		return deferred.promise;
+		
 	}
 	
 	return service;

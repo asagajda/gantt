@@ -24,10 +24,35 @@ phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Ph
 
 phonecatControllers.controller('GanttCtrl', ['$scope', 'tasksOfPlan', 'DiagramBuilder',
   function($scope, tasksOfPlan, DiagramBuilder) {
-
+	
 	$scope.data1 = DiagramBuilder.buildDiagram();
 	
-	$scope.tasks = tasksOfPlan.query();
+	/*var tasks = tasksOfPlan.query();
+	tasks.$promise.then(
+			function(result)
+			{
+				var rows = [];	
+				var users = [];
+				for (var i = 0; i < result.length; i++){
+					if ($.inArray(result[i].assignees[0], users)==-1)
+					{
+						var user = result[i].assignees[0];
+						users.push(user);
+						rows.push({user : user, tasks : []});
+					};
+				};
+				for (var i = 0; i < rows.length; i++){
+					for (var j = 0; j < result.length; j++){
+						if (rows[i].user == result[j].assignees[0])
+						{
+							rows[i].tasks.push(result[j]);
+						}
+					}
+				};
+				$scope.tasks = rows;
+			}
+			
+		);*/
 
 	$scope.data = [
 	    {
